@@ -98,8 +98,6 @@ function Game() {
   const handlRestart = () => {
     setXIsNext(true);
     setWinner(null);
-    setSquaresTrack(Array(9).fill(null));
-    setXIsNextTrack([true]);
     setSquares(Array(9).fill(null));
   };
 
