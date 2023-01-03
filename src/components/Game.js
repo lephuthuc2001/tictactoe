@@ -99,6 +99,8 @@ function Game() {
     setSquares(Array(9).fill(null));
     setXIsNext(true);
     setWinner(null);
+    setSquaresTrack(Array(9).fill(null));
+    setXIsNextTrack([true]);
   };
 
   //GO to move

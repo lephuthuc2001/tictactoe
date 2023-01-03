@@ -116,7 +116,7 @@ body {
 
 .restart-btn {
   cursor: pointer;
-  border: 1px solid #3787ce;
+  border: 1px solid #ae3ec9;
   border-radius: 4px;
   background-color: #ae3ec9;
   color: #fff;
@@ -128,4 +128,8 @@ body {
 .core-section {
   display: flex;
   gap: 20px;
+}
+
+button:hover {
+  background-color: #cc5de8;
 }
