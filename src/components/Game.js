@@ -1,14 +1,25 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Board from "./Board";
-
+import History from "./History";
 function Game() {
   const [squares, setSquares] = useState(Array(9).fill(null));
   const [xIsNext, setXIsNext] = useState(true);
   const [winner, setWinner] = useState(null);
 
+  const [squaresTrack, setSquaresTrack] = useState([Array(9).fill(null)]);
+  const [xIsNextTrack, setXIsNextTrack] = useState([true]);
+
+  const [isCheckingHistory, setIsCheckingHistory] = useState(false);
+
   //Declaring a Winner
   useEffect(() => {
-    "Your code here";
+    if (calculateWinner(squares)) {
+      setWinner(xIsNext ? "X" : "O");
+    } else {
+      setXIsNext(!xIsNext);
+    }
+    console.log(squaresTrack);
+    console.log(xIsNextTrack);
   }, [squares]);
 
   //function to check if a player has won.
@@ -40,22 +51,84 @@ function Game() {
 
   //Handle player
   const handleClick = (i) => {
-    "Your code here";
+    if (squares[i]) return;
+    if (!isCheckingHistory) {
+      if (!winner) {
+        setSquares(() => {
+          squares[i] = xIsNext ? "X" : "O";
+          return [...squares];
+        });
+
+        setSquaresTrack((prev) => {
+          return [...prev, [...squares]];
+        });
+
+        setXIsNextTrack((prev) => {
+          return [...prev, xIsNext];
+        });
+      }
+    } else {
+      const currentMove = squares.filter((square) => square !== null).length;
+      setSquaresTrack((prev) => {
+        return [...prev.slice(0, currentMove + 1)];
+      });
+
+      setXIsNextTrack((prev) => {
+        return [...prev.slice(0, currentMove + 1)];
+      });
+      setIsCheckingHistory(false);
+      setWinner(null);
+
+      setSquares(() => {
+        squares[i] = xIsNext ? "X" : "O";
+        return [...squares];
+      });
+
+      setSquaresTrack((prev) => {
+        return [...prev, [...squares]];
+      });
+
+      setXIsNextTrack((prev) => {
+        return [...prev, xIsNext];
+      });
+    }
   };
 
   //Restart game
   const handlRestart = () => {
-    "Your code here";
+    setSquares(Array(9).fill(null));
+    setXIsNext(true);
+    setWinner(null);
+  };
+
+  //GO to move
+
+  const goToMove = (i) => {
+    setSquares([...squaresTrack[i]]);
+    setXIsNext(xIsNextTrack[i]);
+  };
+
+  //Check history
+  const checkHistoryHandler = () => {
+    setIsCheckingHistory(true);
   };
 
   return (
     <div className="main">
       <h2 className="result">Winner is: {winner ? winner : "N/N"}</h2>
-      <div className="game">
-        <span className="player">Next player is: {xIsNext ? "X" : "O"}</span>
-        <Board squares={"Your code here"} handleClick={"Your code here"} />
+      <div className="core-section">
+        <div className="game">
+          <span className="player">Next player is: {xIsNext ? "X" : "O"}</span>
+          <Board squares={squares} handleClick={handleClick} />
+        </div>
+        <History
+          squaresTrack={squaresTrack}
+          goToMove={goToMove}
+          onCheckHistory={checkHistoryHandler}
+        />
       </div>
-      <button onClick={"Your code here"} className="restart-btn">
+
+      <button onClick={handlRestart} className="restart-btn">
         Restart
       </button>
     </div>
