@@ -96,11 +96,11 @@ function Game() {
 
   //Restart game
   const handlRestart = () => {
-    setSquares(Array(9).fill(null));
     setXIsNext(true);
     setWinner(null);
     setSquaresTrack(Array(9).fill(null));
     setXIsNextTrack([true]);
+    setSquares(Array(9).fill(null));
   };
 
   //GO to move
